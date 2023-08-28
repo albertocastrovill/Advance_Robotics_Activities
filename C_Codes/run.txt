@@ -1,0 +1,4 @@
+#Ejemplo de como correr programa en terminal
+
+gcc miprograma.c -o miprograma
+./miprograma
