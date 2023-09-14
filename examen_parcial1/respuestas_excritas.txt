@@ -1,0 +1,16 @@
+
+Sección I . 
+
+1. A) Control de Antena de Radioatronomía
+2. C) 3
+3. D) mv
+4. B) piping
+5. A) Ejecutable
+
+
+Sección II . 
+
+1. La programación en miltithread o multihilos, nos sirve para realizar acciones o correr programas casi de forma simultánea
+lo cual nos ayuda a reducir el tiempo de procesamiento de la computadora o microcontrolador que estemos usando y poder
+llegar a realizar acciones para aplicaciones en tiempo real, sin interrupciones. Algunas aplicaciones muy usadas son para carros autónomos, drones, robots industrial, etc.
+
