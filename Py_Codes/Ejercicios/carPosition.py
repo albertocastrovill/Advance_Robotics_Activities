@@ -1,5 +1,6 @@
 import math
 import numpy as np
+import random
 
 encoder = 20
 numPulsos = 80
@@ -22,11 +23,26 @@ t = 2 #seg
 
 R = np.array([[np.cos(0), -np.sin(0), 0],[np.sin(0), np.cos(0), 0],[0, 0, 1]])
 
-r = d/2 #cm
+# Porcentaje de rango (5%)
+porcentaje_rango = 5
+
+# Calcula el rango mínimo y máximo
+rango_minimo = d - (d * porcentaje_rango / 100)
+rango_maximo = d + (d * porcentaje_rango / 100)
+
+# Genera un valor aleatorio dentro del rango
+dl = random.uniform(rango_minimo, rango_maximo)
+dr = random.uniform(rango_minimo, rango_maximo)
+print(f"Valor diametro left : {dl}")
+print(f"Valor diametro right : {dr}")
+
+r1 = dl/2 #cm
+r2 = dr/2  #cm
 w1 = 8 * math.pi
 w2 = 8 * math.pi
 l = 11 #cm
-sensores = np.array([[(r*w1)/2 + (r*w2)/2],[0],[(r*w1)/(2*l) + (-r*w2)/(2*l)]])
+
+sensores = np.array([[(r1*w1)/2 + (r2*w2)/2],[0],[(r1*w1)/(2*l) + (-r2*w2)/(2*l)]])
 
 XG = XGk2 + (t*R*sensores)
 
