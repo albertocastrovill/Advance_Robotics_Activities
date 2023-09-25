@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import random
+#from mpmath import cot
 
 encoder = 20
 numPulsos = 80
@@ -33,8 +34,8 @@ rango_maximo = d + (d * porcentaje_rango / 100)
 # Genera un valor aleatorio dentro del rango
 dl = random.uniform(rango_minimo, rango_maximo)
 dr = random.uniform(rango_minimo, rango_maximo)
-print(f"Valor diametro left : {dl}")
-print(f"Valor diametro right : {dr}")
+#print(f"Valor diametro left : {dl}")
+#print(f"Valor diametro right : {dr}")
 
 r1 = dl/2 #cm
 r2 = dr/2  #cm
@@ -48,4 +49,21 @@ XG = XGk2 + (t*R*sensores)
 
 print(XG)
 
+
+## Segunda parte
+
+L = 0
+R1 = 0
+W = 0
+
+#eq3 = math.tan(L / R1 + (W/2))
+#eq5 = math.tan(L / R1 - (W/2))
+
+def cot (angulo):
+    return 1/math.tan(angulo)
+
+
+Delta = math.tan((cot(10) + cot(10)) / 2)
+deg = math.degrees(Delta)
+print(deg)
 
