@@ -85,7 +85,9 @@ for currentIndex in range(1, int(vectorSize)):
 print("\nFinal Pose Values: ")
 print("Xg: ", poseEstimation.x[-1])
 print("Yg: ", poseEstimation.y[-1])
-print("Og (radians): ", poseEstimation.yaw[-1])
+print("Og (radians): ", np.rad2deg(poseEstimation.yaw[-1]))
 print("\nWheel Speeds: ")
 print("Angular Speed per Wheel (rad/s): ", angularSpeed)
 print("Linear Speed per Wheel (m/s): ", linearSpeed)
+
+print("Og (radians): ", np.rad2deg(poseEstimation.yaw))

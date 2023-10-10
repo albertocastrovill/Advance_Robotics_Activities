@@ -1,8 +1,6 @@
 import time
-# Universal standar to work with numerical data in Python
 import numpy as np
 
-# Pose class contains three arrays that will store vehicle position and orientation values
 class Pose:
     def __init__(self, size):
         self.x = np.zeros(size)
@@ -12,9 +10,9 @@ class Pose:
         self.x = newX
         self.y = newY
         self.yaw = newYaw
-# Robot class stores vehicle variables from its local frame: left and right speed & orientation
+
 class Robot:
-    def __init__(self, xSpeed,ySpeed,turningVel):
+    def __init__(self, xSpeed, ySpeed, turningVel):
         self.xSpeed = xSpeed
         self.ySpeed = ySpeed
         self.turningVel = turningVel
@@ -23,26 +21,23 @@ class Robot:
         self.ySpeed = newYSpeed
         self.turningVel = newTurnSpeed
 
-# This function contains the equation of the forward kinematic model for a differential drive vehicle
-def computeOdometry(index2Updte, rotData, velocityData):
-    # GET PREVIOUS POSE DATA FROM THE POSE VECTOR
+def computeOdometry(index2Updte, rotData, velocityData, delta_t, L, delta_theta):
     previousPose = np.array([
         [poseEstimation.x[index2Updte-1]],
         [poseEstimation.y[index2Updte-1]],
         [poseEstimation.yaw[index2Updte-1]]
     ])
-    # SAVE THE CURRENT POSE DATA INTO THE POSE STRUCTURE
-    velocititesFactor = samplingRate*np.dot(rotData,velocityData)
+    velocititesFactor = delta_t * np.dot(rotData, velocityData)
     poseEstimation.x[index2Updte] = previousPose[0] + velocititesFactor[0]
     poseEstimation.y[index2Updte] = previousPose[1] + velocititesFactor[1]
-    poseEstimation.yaw[index2Updte] = previousPose[2] + velocititesFactor[2]
-    
-    
-# Compute current vehicle speed and orientation variables
-def vehicleParameters(rightWheelSpeed, leftWheelSpeed, wheelRadius, widthValue):
-    localXSpeed = (wheelRadius*rightWheelSpeed/2)+(wheelRadius*leftWheelSpeed/2)
-    localTurninigSpeed = (wheelRadius*rightWheelSpeed/(2*widthValue))-(wheelRadius*leftWheelSpeed/(2*widthValue))
-    myRobot.update(localXSpeed, 0, localTurninigSpeed)
+    poseEstimation.yaw[index2Updte] = previousPose[2] + (velocititesFactor[0] * np.tan(delta_theta)) / L
+
+def vehicleParameters(encoder_pulses, pulses_per_second, wheel_radius, delta_theta, L):
+    V = (2 * np.pi * wheel_radius * pulses_per_second) / encoder_pulses
+    localXSpeed = V * np.cos(delta_theta)
+    localYSpeed = V * np.sin(delta_theta)
+    localTurninigSpeed = V * np.tan(delta_theta) / L
+    myRobot.update(localXSpeed, localYSpeed, localTurninigSpeed)
     localRobotSpeed = np.array([
         [myRobot.xSpeed],
         [myRobot.ySpeed],
@@ -50,8 +45,6 @@ def vehicleParameters(rightWheelSpeed, leftWheelSpeed, wheelRadius, widthValue):
     ])
     return localRobotSpeed
 
-# Compute the new rotational matrix 
-# Make sure the argument previousYaw is in radians 
 def rotateAroundZ(previousYaw):
     cosResult = np.cos(previousYaw)
     sinResult = np.sin(previousYaw)
@@ -59,16 +52,18 @@ def rotateAroundZ(previousYaw):
         [cosResult, -sinResult, 0],
         [sinResult, cosResult, 0],
         [0, 0, 1]
-    ])#START ODOMETRY COMPUTATION
+    ])
     return rotZ
 
-
 # ==== USER INPUTS
-rightSpeed = float(input("Enter Starting Speed of Right Wheel: "))
-leftSpeed = float(input("Enter Starting Speed of Left Wheel: "))
-initialX = float(input("Enter Starting X position: "))
-initialY = float(input("Enter Starting Y position: "))
-initialYaw = float(input("Enter Starting Heading Value -degrees-: "))
+encoder_pulses = 20
+pulses_per_second = 80
+wheel_radius = 0.036
+delta_theta = np.radians(0)  # converting degrees to radians
+L = 0.22  # WheelBase (lb+lf) in meters
+initialX = 0.0
+initialY = 0.0
+initialYaw = 0.0
 
 # ==== Physical Parameters of the Differential Mobile Robot SETUP ====
 WHEELRADIUS = 0.076/2.0 # in mts
@@ -77,7 +72,7 @@ myRobot = Robot(0.0,0.0,0.0)
 
 # ==== TIME REQUIREMENTS SETUP ====
 # Setup elapsed time and sampling-rate for the test
-elapsedTime = 5
+elapsedTime = 2
 samplingRate = 0.25
 # ==== POSE VECTOR SIZE CALCULATION === 
 vectorSize = elapsedTime/samplingRate
@@ -102,19 +97,18 @@ pastTime = (endTime - elapsedTime)
 # === START ODOMETRY COMPUTATION ====
 # As long as current time is less than endTime
 while time.time() <= endTime:
-#    print("Pass time: ", pastTime)
-#    print("Count: ", currentIndex)
-#    print("Delta Time: ", time.time()-pastTime)
     currentTime = time.time()
     if (currentTime-pastTime) >= samplingRate:
-        
-        rotZMat = rotateAroundZ(poseEstimation.yaw[currentIndex-1])
-        robotSpeedData = vehicleParameters(rightSpeed,leftSpeed,WHEELRADIUS, WIDTHCONTACTPOINT)
-        computeOdometry(currentIndex, rotZMat, robotSpeedData)
+        rotZMat = rotateAroundZ(poseEstimation.yaw[currentIndex])
+        robotSpeedData = vehicleParameters(encoder_pulses, pulses_per_second, wheel_radius, delta_theta, L)
+        computeOdometry(currentIndex, rotZMat, robotSpeedData, samplingRate, L, delta_theta)
         pastTime = currentTime
         currentIndex += 1
         print("Count: ", currentIndex)
-    
+        # Check if we have reached the end of our pose arrays
+        if currentIndex >= len(poseEstimation.x):
+            break
+
 # === LATELY, DISPLAY SAMPLED POSES ====
 # Print final pose values
 print("Pose Values: ")
