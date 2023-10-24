@@ -87,7 +87,15 @@ print(f"Porcentaje de Asfalto: {(asphalt_count / total_points) * 100:.2f}%")
 print(f"Porcentaje de Tierra: {(earth_count / total_points) * 100:.2f}%")
 print(f"Porcentaje de Pasto: {(grass_count / total_points) * 100:.2f}%")
 
+# Determina el terreno observado en base a los conteos
+if asphalt_count > earth_count and asphalt_count > grass_count:
+    terreno_observado = "Asfalto"
+elif earth_count > asphalt_count and earth_count > grass_count:
+    terreno_observado = "Tierra"
+else:
+    terreno_observado = "Pasto"
 
+print(f"Terreno Observado en el Dataset es mayormente {terreno_observado}")
 
 
 
