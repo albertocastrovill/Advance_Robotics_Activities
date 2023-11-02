@@ -13,7 +13,7 @@ plt.title('Distancia vs. Ángulo de Bateo')
 # Modelo matemático (Polinomial)
 z = np.polyfit(data['Angulo'], data['Distancia'], 2)
 p = np.poly1d(z)
-angulos = np.linspace(0, 80, 5000)
+angulos = np.linspace(0, 65, 5000)
 p_ang = p(angulos)
 plt.plot(angulos, p_ang, 'r-', label='Ajuste polinomial')
 plt.legend()
@@ -25,10 +25,10 @@ R2 = 1 - (np.sum((y_actual - y_pred)**2) / ((len(y_actual) - 1) * np.var(y_actua
 print(f'Coeficiente de determinación R^2: {R2:.3f}')
 
 # Sugerencia del Asistente de Bateo
-distancia_objetivo = 150  # Aquí puedes cambiar la distancia que desees
+distancia_objetivo = 140  # cambiar la distancia objetivo
 sugerencias = []
 
-# Como es una ecuación polinomial, lo más probable es que haya dos ángulos con los cuales llegarías a la misma distancia objetivo
+# Como es una ecuación cuadrática, lo más probable es que haya dos ángulos con los cuales llegarías a la misma distancia objetivo
 # Por lo tanto será necesario cacular los diferentes ángulos de esta ecuación que dan como resultado la distancia objetivo.
 
 for ang in angulos:
