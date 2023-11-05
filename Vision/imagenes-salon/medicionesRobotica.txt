@@ -1,0 +1,20 @@
+Nota:las distancias estan medidas desde la esquina 
+
+distancia z:270cm
+
+punto 1-2
+distancia en x: 31.2 cm 
+distancia en y: 127cm 
+
+puto 3-4
+distancia en x: 110 cm 
+distancia en y: 131 cm 
+
+punto 5-6
+distancia en x: 68 cm 
+distancia en y: 49 cm 
+
+punto 7-8
+distancia en x: 138cm 
+distancia en y: 25cm 
+
