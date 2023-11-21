@@ -5,11 +5,11 @@ import math
 import imutils
 
 #Load the grayscale image
-originalImage = cv2.imread('img_triangle/triangle1.jpg')
+originalImage = cv2.imread('imgs/pattern_T03.jpeg')
 grayScaleImage = cv2.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
 
 #Threshold the image to obtain a binary image
-thresholdValue = 50
+thresholdValue = 100
 _, binaryImage = cv2.threshold(grayScaleImage, thresholdValue, 255, cv2.THRESH_BINARY)
 
 #Find the contours in the binary image
