@@ -10,7 +10,7 @@ def calc_angle(p1,p2):
     return res
 
 # Cargar la imagen
-image_path = 'img_triangle/triangle4.jpg' 
+image_path = '../img_triangle/triangle4.jpg' 
 frame = cv2.imread(image_path)
 
 # Convertir el cuadro capturado de BGR a HSV
